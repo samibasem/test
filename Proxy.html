@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Simple Proxy</title>
+</head>
+<body>
+   <h1>Simple Proxy</h1>
+   <input type="text" id="urlInput" placeholder="Enter URL" style="width: 80%;">
+   <button id="loadButton">Load URL</button>
+   <iframe id="proxyFrame" style="width: 100%; height: 80vh;"></iframe>
+
+   <script>
+       document.getElementById('loadButton').onclick = function() {
+           const url = document.getElementById('urlInput').value;
+           document.getElementById('proxyFrame').src = 'https://cors-anywhere.herokuapp.com/' + url;
+       };
+   </script>
+</body>
+</html>
+
