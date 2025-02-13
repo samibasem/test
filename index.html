@@ -1,78 +1,75 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Datei-Upload/Download</title>
+    <title>Video-Downloader</title>
     <style>
         body { font-family: sans-serif; }
-        #login-container { display: block; }
-        #app-container { display: none; }
+        #iframe-container { width: 100%; height: 500px; border: 1px solid #ccc; }
+        iframe { width: 100%; height: 100%; border: none; }
     </style>
 </head>
 <body>
 
-<div id="login-container">
-    <h2>Passwortgeschützt</h2>
-    <input type="password" id="password" placeholder="Passwort">
-    <button onclick="login()">Anmelden</button>
-    <p id="login-error" style="color: red;"></p>
-</div>
+    <h1>Video-Downloader</h1>
 
-<div id="app-container">
-    <h2>Datei-Upload/Download</h2>
+    <div>
+        <input type="text" id="url-input" placeholder="Gib eine URL ein">
+        <button onclick="loadWebsite()">Laden</button>
+    </div>
 
-    <h3>Datei hochladen</h3>
-    <input type="file" id="file-upload">
-    <button onclick="uploadFile()">Hochladen</button>
-    <div id="upload-progress"></div>
+    <div id="iframe-container">
+        <iframe id="website-iframe"></iframe>
+    </div>
 
-    <h3>Datei herunterladen</h3>
-    <input type="text" id="file-name" placeholder="Dateiname">
-    <button onclick="downloadFile()">Herunterladen</button>
-    <div id="download-progress"></div>
-</div>
+    <div id="download-buttons">
+        <!-- Hier werden die Download-Buttons dynamisch erstellt -->
+    </div>
 
-<script>
-    const correctPassword = "password"; // Ändere dies!
-    const loginContainer = document.getElementById("login-container");
-    const appContainer = document.getElementById("app-container");
-    const loginError = document.getElementById("login-error");
+    <script>
+        function loadWebsite() {
+            const url = document.getElementById("url-input").value;
+            const iframe = document.getElementById("website-iframe");
+            iframe.src = url;
 
-    function login() {
-        const password = document.getElementById("password").value;
-        if (password === correctPassword) {
-            loginContainer.style.display = "none";
-            appContainer.style.display = "block";
-        } else {
-            loginError.innerText = "Falsches Passwort.";
-        }
-    }
+            // Warte, bis das Iframe geladen ist
+            iframe.onload = function() {
+                // Versuche, Videos zu finden (dies ist aufgrund von CORS möglicherweise nicht möglich)
+                try {
+                    const videos = iframe.contentDocument.getElementsByTagName("video");
+                    const downloadButtonsContainer = document.getElementById("download-buttons");
+                    downloadButtonsContainer.innerHTML = ""; // Buttons entfernen
 
-    function uploadFile() {
-        const fileInput = document.getElementById("file-upload");
-        const file = fileInput.files[0];
-        if (!file) {
-            alert("Bitte wähle eine Datei aus.");
-            return;
-        }
-
-        // Hier müsste der Code zum Aufteilen der Datei und zum Hochladen der Teile stehen
-        // Dies ist jedoch aufgrund der Einschränkungen von GitHub Pages sehr komplex und
-        // erfordert die Verwendung der GitHub API, was zusätzliche Authentifizierungsprobleme mit sich bringt.
-        alert("Upload-Funktion ist noch nicht implementiert (auf GitHub Pages nicht einfach möglich).");
-    }
-
-    function downloadFile() {
-        const fileName = document.getElementById("file-name").value;
-        if (!fileName) {
-            alert("Bitte gib einen Dateinamen ein.");
-            return;
+                    for (let i = 0; i < videos.length; i++) {
+                        const video = videos[i];
+                        const videoSrc = video.src || video.currentSrc; // Quelle des Videos
+                        if (videoSrc) {
+                            const downloadButton = document.createElement("button");
+                            downloadButton.innerText = "Video herunterladen";
+                            downloadButton.onclick = function() {
+                                downloadVideo(videoSrc);
+                            };
+                            downloadButtonsContainer.appendChild(downloadButton);
+                        }
+                    }
+                } catch (error) {
+                    console.error("Fehler beim Zugriff auf das Iframe (CORS-Problem?):", error);
+                    alert("Fehler beim Zugriff auf die Website. Möglicherweise liegt ein CORS-Problem vor.");
+                }
+            };
         }
 
-        // Hier müsste der Code zum Herunterladen der Datei in Teilen und zum Zusammenfügen stehen
-        // Dies ist jedoch aufgrund der Einschränkungen von GitHub Pages sehr komplex.
-        alert("Download-Funktion ist noch nicht implementiert (auf GitHub Pages nicht einfach möglich).");
-    }
-</script>
+        function downloadVideo(videoSrc) {
+            // Hier sollte der Code zum Herunterladen des Videos stehen
+            // Dies ist jedoch aufgrund von CORS und den Einschränkungen von GitHub Pages sehr schwierig.
+            // Stattdessen erstellen wir einen einfachen Link.
+            const a = document.createElement("a");
+            a.href = videoSrc;
+            a.download = "video.mp4"; // Standarddateiname
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+    </script>
 
 </body>
 </html>
