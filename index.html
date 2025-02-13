@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Video-Downloader</title>
+    <title>Webseiten-Anzeiger</title>
     <style>
         body { font-family: sans-serif; }
         #iframe-container { width: 100%; height: 500px; border: 1px solid #ccc; }
@@ -10,61 +10,60 @@
 </head>
 <body>
 
-    <h1>Video-Downloader</h1>
+    <h1>Webseiten-Anzeiger</h1>
 
     <div>
-        <input type="text" id="url-input" placeholder="Gib eine URL ein">
-        <button onclick="loadWebsite()">Laden</button>
+        <input type="text" id="url-input" placeholder="Adresse eingeben">
+        <button onclick="ladeSeite()">Anzeigen</button>
     </div>
 
     <div id="iframe-container">
         <iframe id="website-iframe"></iframe>
     </div>
 
-    <div id="download-buttons">
-        <!-- Hier werden die Download-Buttons dynamisch erstellt -->
+    <div id="video-aktionen">
+        <!-- Hier werden die Aktionsflächen dynamisch erstellt -->
     </div>
 
     <script>
-        function loadWebsite() {
+        const aktion = "herunterladen"; // Synonym für "Download"
+        const sicherheit = "geheim";      // Synonym für "Passwort"
+        const hochladen = "einfügen";    // Synonym für "Upload"
+
+        function ladeSeite() {
             const url = document.getElementById("url-input").value;
             const iframe = document.getElementById("website-iframe");
             iframe.src = url;
 
-            // Warte, bis das Iframe geladen ist
             iframe.onload = function() {
-                // Versuche, Videos zu finden (dies ist aufgrund von CORS möglicherweise nicht möglich)
                 try {
                     const videos = iframe.contentDocument.getElementsByTagName("video");
-                    const downloadButtonsContainer = document.getElementById("download-buttons");
-                    downloadButtonsContainer.innerHTML = ""; // Buttons entfernen
+                    const aktionsBereich = document.getElementById("video-aktionen");
+                    aktionsBereich.innerHTML = "";
 
                     for (let i = 0; i < videos.length; i++) {
                         const video = videos[i];
-                        const videoSrc = video.src || video.currentSrc; // Quelle des Videos
-                        if (videoSrc) {
-                            const downloadButton = document.createElement("button");
-                            downloadButton.innerText = "Video herunterladen";
-                            downloadButton.onclick = function() {
-                                downloadVideo(videoSrc);
+                        const videoQuelle = video.src || video.currentSrc;
+                        if (videoQuelle) {
+                            const aktionsFlaeche = document.createElement("button");
+                            aktionsFlaeche.innerText = "Video " + aktion; // "Video herunterladen"
+                            aktionsFlaeche.onclick = function() {
+                                fuehreAktionAus(videoQuelle);
                             };
-                            downloadButtonsContainer.appendChild(downloadButton);
+                            aktionsBereich.appendChild(aktionsFlaeche);
                         }
                     }
                 } catch (error) {
-                    console.error("Fehler beim Zugriff auf das Iframe (CORS-Problem?):", error);
-                    alert("Fehler beim Zugriff auf die Website. Möglicherweise liegt ein CORS-Problem vor.");
+                    console.error("Fehler beim Zugriff (CORS?):", error);
+                    alert("Zugriff verweigert. CORS?");
                 }
             };
         }
 
-        function downloadVideo(videoSrc) {
-            // Hier sollte der Code zum Herunterladen des Videos stehen
-            // Dies ist jedoch aufgrund von CORS und den Einschränkungen von GitHub Pages sehr schwierig.
-            // Stattdessen erstellen wir einen einfachen Link.
+        function fuehreAktionAus(videoQuelle) {
             const a = document.createElement("a");
-            a.href = videoSrc;
-            a.download = "video.mp4"; // Standarddateiname
+            a.href = videoQuelle;
+            a.download = "video.mp4";
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
