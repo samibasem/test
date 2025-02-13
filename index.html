@@ -1,25 +1,78 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-   <meta charset="UTF-8">
-   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title>test</title>
+    <title>Datei-Upload/Download</title>
+    <style>
+        body { font-family: sans-serif; }
+        #login-container { display: block; }
+        #app-container { display: none; }
+    </style>
 </head>
 <body>
-   <h1>test</h1>
-   <button id="startButton">Start VPN</button>
-   <pre id="log"></pre>
-   <iframe id="proxyFrame" style="width:100%; height:600px;"></iframe>
 
-   <script src="vpn.js"></script>
+<div id="login-container">
+    <h2>Passwortgeschützt</h2>
+    <input type="password" id="password" placeholder="Passwort">
+    <button onclick="login()">Anmelden</button>
+    <p id="login-error" style="color: red;"></p>
+</div>
 
-   <!-- Link zur Proxy-Seite hinzufügen -->
-   <h2>Browse Blocked Websites</h2>
-   <p>Use our simple proxy to browse blocked websites:</p>
-   <a href="proxy.html" target="_blank">Go to Proxy Page</a>
+<div id="app-container">
+    <h2>Datei-Upload/Download</h2>
+
+    <h3>Datei hochladen</h3>
+    <input type="file" id="file-upload">
+    <button onclick="uploadFile()">Hochladen</button>
+    <div id="upload-progress"></div>
+
+    <h3>Datei herunterladen</h3>
+    <input type="text" id="file-name" placeholder="Dateiname">
+    <button onclick="downloadFile()">Herunterladen</button>
+    <div id="download-progress"></div>
+</div>
+
+<script>
+    const correctPassword = "password"; // Ändere dies!
+    const loginContainer = document.getElementById("login-container");
+    const appContainer = document.getElementById("app-container");
+    const loginError = document.getElementById("login-error");
+
+    function login() {
+        const password = document.getElementById("password").value;
+        if (password === correctPassword) {
+            loginContainer.style.display = "none";
+            appContainer.style.display = "block";
+        } else {
+            loginError.innerText = "Falsches Passwort.";
+        }
+    }
+
+    function uploadFile() {
+        const fileInput = document.getElementById("file-upload");
+        const file = fileInput.files[0];
+        if (!file) {
+            alert("Bitte wähle eine Datei aus.");
+            return;
+        }
+
+        // Hier müsste der Code zum Aufteilen der Datei und zum Hochladen der Teile stehen
+        // Dies ist jedoch aufgrund der Einschränkungen von GitHub Pages sehr komplex und
+        // erfordert die Verwendung der GitHub API, was zusätzliche Authentifizierungsprobleme mit sich bringt.
+        alert("Upload-Funktion ist noch nicht implementiert (auf GitHub Pages nicht einfach möglich).");
+    }
+
+    function downloadFile() {
+        const fileName = document.getElementById("file-name").value;
+        if (!fileName) {
+            alert("Bitte gib einen Dateinamen ein.");
+            return;
+        }
+
+        // Hier müsste der Code zum Herunterladen der Datei in Teilen und zum Zusammenfügen stehen
+        // Dies ist jedoch aufgrund der Einschränkungen von GitHub Pages sehr komplex.
+        alert("Download-Funktion ist noch nicht implementiert (auf GitHub Pages nicht einfach möglich).");
+    }
+</script>
+
 </body>
 </html>
-
-
-
-
